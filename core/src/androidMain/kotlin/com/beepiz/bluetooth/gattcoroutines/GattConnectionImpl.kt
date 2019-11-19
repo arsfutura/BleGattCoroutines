@@ -1,10 +1,6 @@
 package com.beepiz.bluetooth.gattcoroutines
 
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothGatt
-import android.bluetooth.BluetoothGattCallback
-import android.bluetooth.BluetoothGattService
-import android.bluetooth.BluetoothProfile
+import android.bluetooth.*
 import android.os.Build.VERSION.SDK_INT
 import androidx.annotation.RequiresApi
 import com.beepiz.bluetooth.gattcoroutines.GattConnection.Companion.clientCharacteristicConfiguration
@@ -276,7 +272,9 @@ internal class GattConnectionImpl(
         }
 
         override fun onCharacteristicChanged(gatt: BG, characteristic: BGC) {
-            launch { characteristicChangedChannel.send(characteristic) }
+            val newCharacteristic = BluetoothGattCharacteristic(characteristic.uuid, characteristic.properties, characteristic.properties)
+            newCharacteristic.value = characteristic.value
+            launch { characteristicChangedChannel.send(newCharacteristic) }
         }
 
         override fun onDescriptorRead(gatt: BG, descriptor: BGD, status: Int) {
