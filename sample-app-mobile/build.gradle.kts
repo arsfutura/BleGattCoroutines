@@ -22,6 +22,14 @@ android {
     packagingOptions {
         pickFirst("META-INF/kotlinx-coroutines-core.kotlin_module")
     }
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storePassword = "android"
+        }
+    }
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
